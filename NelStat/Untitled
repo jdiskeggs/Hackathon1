@@ -1,0 +1,19 @@
+#Import Data
+data = pd.read_csv('SampleData.csv')
+# Create Pivot
+AST = pd.pivot_table(data,
+                    values=['MTD', '3M', '6M', 'YTD'],
+                    index=['strategy_classification'],
+                    aggfunc=np.mean
+                    )
+#Sort Alphabetically by strategy_classification
+AST['labels'] = AST.index.str.lower()
+AST = AST.sort_values('labels').drop('labels', axis=1)
+#Re-order Columns
+AST = AST[['MTD', '3M', '6M', 'YTD']]
+#Change formatting of numbers into Percentage
+AST['MTD'] = pd.Series(["{0:.2f}%".format(val * 100) for val in AST['MTD']], index = AST.index)
+AST['3M'] = pd.Series(["{0:.2f}%".format(val * 100) for val in AST['3M']], index = AST.index)
+AST['6M'] = pd.Series(["{0:.2f}%".format(val * 100) for val in AST['6M']], index = AST.index)
+AST['YTD'] = pd.Series(["{0:.2f}%".format(val * 100) for val in AST['YTD']], index = AST.index)
+AST
